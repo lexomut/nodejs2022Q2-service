@@ -74,7 +74,6 @@ export class FavouritesService {
     }
 
     async removeTrack(id: string) {
-        console.log( id,this.favourites.tracks );
         if (!validate(id)) {
             throw new BadRequestException('Track id isn\'t validate');
         }
@@ -82,9 +81,7 @@ export class FavouritesService {
         if (index === -1) {
             throw new NotFoundException('Favourites not found');
         } else {
-            console.log('else', index, id,this.favourites.tracks );
             this.favourites.tracks[index] = undefined;
-            console.log('end', id,this.favourites.tracks );
         }
 
     }
