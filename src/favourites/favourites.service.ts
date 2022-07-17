@@ -25,7 +25,7 @@ export class FavouritesService {
         return { artists, albums, tracks };
     }
 
-    async createTrack(id: string) {
+    async addTrack(id: string) {
         if (!validate(id)) {
             throw new BadRequestException("Track id isn't validate");
         }
@@ -38,7 +38,7 @@ export class FavouritesService {
         return id;
     }
 
-    async createAlbum(id: string) {
+    async addAlbum(id: string) {
         if (!validate(id)) {
             throw new BadRequestException("Album id isn't validate");
         }
@@ -51,7 +51,7 @@ export class FavouritesService {
         return id;
     }
 
-    async createArtist(id: string) {
+    async addArtist(id: string) {
         if (!validate(id)) {
             throw new BadRequestException("Artist id isn't validate");
         }
@@ -63,7 +63,7 @@ export class FavouritesService {
         this.favourites.artists.push(id);
         return id;
     }
-    async deleteTrack(id: string) {
+    async removeTrack(id: string) {
         if (!validate(id)) {
             throw new BadRequestException("Track id isn't validate");
         }
@@ -74,7 +74,7 @@ export class FavouritesService {
         this.favourites.tracks.splice(index, 1);
     }
 
-    async deleteAlbum(id: string) {
+    async removeAlbum(id: string) {
         if (!validate(id)) {
             throw new BadRequestException("Album id isn't validate");
         }
@@ -85,7 +85,7 @@ export class FavouritesService {
         this.favourites.albums.splice(index, 1);
     }
 
-    async deleteArtist(id: string) {
+    async removeArtist(id: string) {
         if (!validate(id)) {
             throw new BadRequestException("Artist id isn't validate");
         }
