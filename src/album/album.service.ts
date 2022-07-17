@@ -4,12 +4,15 @@ import { validate ,v4 as uuidv4 } from 'uuid';
 import { AlbumCreateDTO, AlbumUpdateDto } from './album.dto';
 import { InMemoryDB } from '../db';
 import { TrackService } from '../track/track.service';
+import { FavouritesService } from 'src/favourites/favourites.service';
 
 @Injectable()
 export class AlbumService {
     private readonly albums: Album[];
     constructor( @Inject(forwardRef(() => TrackService))
-                  private trackService: TrackService) {
+                  private trackService: TrackService,
+                 @Inject(forwardRef(() => FavouritesService))
+                 private favouritesService: FavouritesService) {
         this.albums = new InMemoryDB().albums;
     }
     
@@ -63,11 +66,17 @@ export class AlbumService {
             throw new NotFoundException('Album not found');
         }
         this.albums.splice(index, 1);
-
         const tracks = await this.trackService.getAll();
         const finedTrack =tracks.find(track => track.albumId===id);
         if (finedTrack) {
             await this.trackService.update(finedTrack.id,{albumId:null});
         }
+
+        const favourites = await this.favouritesService.getAll();
+        const finedItem = favourites.albums.find(album => album.id === id);
+        if (finedItem) {
+            await this.favouritesService.removeAlbum(id);
+        }
+
     }
 }
