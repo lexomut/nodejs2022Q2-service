@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common/decorators/core';
-import { Album, Artist, Track, User } from './types';
+import { Album, Artist, Favourites, Track, User } from './types';
 
 @Injectable()
 export class InMemoryDB {
@@ -7,6 +7,7 @@ export class InMemoryDB {
     tracks: Track[] = [];
     artists: Artist[] = [];
     users: User[] = [];
+    favourites : Favourites={albums:[],tracks:[],artists:[]}
     private static instance;
 
     constructor() {

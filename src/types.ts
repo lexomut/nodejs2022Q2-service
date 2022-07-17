@@ -32,9 +32,17 @@ export interface Album {
 }
 
 
-export interface Favorites {
+export interface Favourites {
     artists: string[]; // favorite artists ids
     albums: string[]; // favorite albums ids
     tracks: string[]; // favorite tracks ids
 }
+
+
+export interface AssociatedFavourites {
+    artists: Artist[];
+    albums: Album[];
+    tracks: Track[];
+}
+
 
