@@ -8,12 +8,12 @@ export class AlbumController {
     constructor(private albumService: AlbumService) {}
 
     @Get()
-    async findAll(): Promise<Album[]> {
+    async getAll(): Promise<Album[]> {
         return await this.albumService.getAll();
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<Album> {
+    async getOnce(@Param('id') id: string): Promise<Album> {
         return await this.albumService.getOnce(id);
     }
 
@@ -29,7 +29,7 @@ export class AlbumController {
 
     @Delete(':id')
     @HttpCode(204)
-    async delete(@Param('id') id: string) {
+    async remove(@Param('id') id: string) {
         return await this.albumService.remove(id);
     }
 
