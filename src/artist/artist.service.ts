@@ -5,6 +5,7 @@ import { ArtistCreateDTO, ArtistUpdateDto } from './artist.dto';
 import { InMemoryDB } from '../db';
 import { AlbumService } from 'src/album/album.service';
 import { TrackService } from 'src/track/track.service';
+import { FavouritesService } from '../favourites/favourites.service';
 
 @Injectable()
 export class ArtistService {
@@ -14,7 +15,8 @@ export class ArtistService {
         @Inject(forwardRef(() => AlbumService))
         private albumService: AlbumService,
         @Inject(forwardRef(() => TrackService))
-        private trackService: TrackService) {
+        private trackService: TrackService, @Inject(forwardRef(() => FavouritesService))
+        private favouritesService: FavouritesService) {
         this.artists = new InMemoryDB().artists;
     }
 
@@ -66,15 +68,22 @@ export class ArtistService {
             throw new NotFoundException('Artist not found');
         }
         this.artists.splice(index, 1);
-        const albums= await this.albumService.getAll();
-        const finedAlbum =albums.find(album => album.artistId===id);
-        if (finedAlbum) {
-            await this.albumService.update(finedAlbum.id,{artistId:null});
-        }
+
         const tracks = await this.trackService.getAll();
-        const finedTrack =tracks.find(track => track.artistId===id);
-        if (finedTrack) {
-            await this.trackService.update(finedTrack.id,{artistId:null});
+        const track = tracks.find(track => track.artistId ===id);
+        if (track) {
+            await this.trackService.update(track.id, { artistId: null });
+        }
+        const albums = await this.albumService.getAll();
+        const finedAlbum = albums.find(album => album.artistId === id);
+        if (finedAlbum) {
+            await this.albumService.update(finedAlbum.id, { artistId: null });
+        }
+
+        const favourites = await this.favouritesService.getAll();
+        const finedItem = favourites.artists.find(artist => artist.id === id);
+        if (finedItem) {
+            await this.favouritesService.removeArtist(id);
         }
     }
 }

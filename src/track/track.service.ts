@@ -1,14 +1,16 @@
 
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Track } from 'src/types';
 import { validate ,v4 as uuidv4 } from 'uuid';
 import { TrackCreateDTO, TrackUpdateDto } from './tracks.dto';
 import { InMemoryDB } from '../db';
+import { FavouritesService } from '../favourites/favourites.service';
 
 @Injectable()
 export class TrackService {
     private readonly tracks: Track[];
-    constructor() {
+    constructor( @Inject(forwardRef(() => FavouritesService))
+                 private favouritesService: FavouritesService) {
         this.tracks = new InMemoryDB().tracks;
     }
 
@@ -37,7 +39,6 @@ export class TrackService {
 
 
     async update(id: string, updateDTO: TrackUpdateDto) {
-        console.log('id',id,'updateDTO',updateDTO);
         if (!validate(id)) {
             throw new BadRequestException("Track id isn't valid");
         }
@@ -49,10 +50,7 @@ export class TrackService {
         }
         const track =this.tracks[index];
         const newTrack: Track = {...track, id, ...updateDTO};
-        console.log( this.tracks[index]);
         this.tracks[index] = newTrack;
-        console.log('id',id,'updateDTO',updateDTO);
-        console.log(newTrack);
         return newTrack;
     }
 
@@ -64,6 +62,13 @@ export class TrackService {
         if (index < 0) {
             throw new NotFoundException('Track not found');
         }
+
         this.tracks.splice(index, 1);
+        const favourites = await this.favouritesService.getAll();
+        const finedItem = favourites.tracks.find(track => track.id === id);
+        if (finedItem) {
+            this.favouritesService.removeTrack(id);
+        }
+
     }
 }

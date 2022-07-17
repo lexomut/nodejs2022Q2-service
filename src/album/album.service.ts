@@ -66,17 +66,17 @@ export class AlbumService {
             throw new NotFoundException('Album not found');
         }
         this.albums.splice(index, 1);
+
         const tracks = await this.trackService.getAll();
-        const finedTrack =tracks.find(track => track.albumId===id);
-        if (finedTrack) {
-            await this.trackService.update(finedTrack.id,{albumId:null});
+        const track = tracks.find(track => track.albumId ===id);
+        if (track) {
+            await this.trackService.update(track.id, { albumId: null });
         }
 
         const favourites = await this.favouritesService.getAll();
-        const finedItem = favourites.albums.find(album => album.id === id);
+        const finedItem = favourites.tracks.find(track => track.id === id);
         if (finedItem) {
-            await this.favouritesService.removeAlbum(id);
+            await this.favouritesService.removeTrack(id);
         }
-
     }
 }

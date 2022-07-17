@@ -26,17 +26,17 @@ export class FavouritesController {
     async addArtist(@Param('id') id: string) {
         return await this.favouritesService.addArtist(id);
     }
-
+    @HttpCode(204)
     @Delete('track/:id')
     async removeTrack(@Param('id') id: string) {
         return await this.favouritesService.removeTrack(id);
     }
-
+    @HttpCode(204)
     @Delete('album/:id')
     async removeAlbum(@Param('id') id: string) {
         return await this.favouritesService.removeAlbum(id);
     }
-
+    @HttpCode(204)
     @Delete('artist/:id')
     async removeArtist(@Param('id') id: string) {
         return await this.favouritesService.removeArtist(id);
