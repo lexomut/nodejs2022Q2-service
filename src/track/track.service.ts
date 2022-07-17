@@ -38,19 +38,21 @@ export class TrackService {
 
     async update(id: string, updateDTO: TrackUpdateDto) {
         console.log('id',id,'updateDTO',updateDTO);
-        console.log( this.tracks);
         if (!validate(id)) {
             throw new BadRequestException("Track id isn't valid");
         }
         const index = this.tracks.findIndex(
             (track) => track.id === id,
         );
-        if (index<0) {
+        if (index < 0) {
             throw new NotFoundException('Track not found');
         }
         const track =this.tracks[index];
         const newTrack: Track = {...track, id, ...updateDTO};
+        console.log( this.tracks[index]);
         this.tracks[index] = newTrack;
+        console.log('id',id,'updateDTO',updateDTO);
+        console.log(newTrack);
         return newTrack;
     }
 

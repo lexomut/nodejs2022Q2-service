@@ -4,19 +4,19 @@ import { IsNotEmpty, IsString, IsUUID, IsOptional, IsNumber } from 'class-valida
 export class TrackCreateDTO {
     @IsNotEmpty()
     @IsString()
-    readonly name: string;
+    name: string;
 
     @IsOptional()
     @IsUUID()
-    readonly artistId: string | null;
+    artistId: string | null;
 
     @IsOptional()
     @IsUUID()
-    readonly albumId: string | null;
+    albumId: string | null;
 
     @IsNotEmpty()
     @IsNumber()
-    readonly duration: number;
+    duration: number;
 }
 
 export class TrackUpdateDto extends PartialType(TrackCreateDTO) {}

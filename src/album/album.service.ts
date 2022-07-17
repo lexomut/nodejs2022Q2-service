@@ -1,13 +1,15 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Album } from 'src/types';
 import { validate ,v4 as uuidv4 } from 'uuid';
 import { AlbumCreateDTO, AlbumUpdateDto } from './album.dto';
 import { InMemoryDB } from '../db';
+import { TrackService } from '../track/track.service';
 
 @Injectable()
 export class AlbumService {
     private readonly albums: Album[];
-    constructor() {
+    constructor( @Inject(forwardRef(() => TrackService))
+                  private trackService: TrackService) {
         this.albums = new InMemoryDB().albums;
     }
     
@@ -36,8 +38,7 @@ export class AlbumService {
 
 
     async update(id: string, updateDTO: AlbumUpdateDto) {
-        console.log('id',id,'updateDTO',updateDTO);
-        console.log( this.albums);
+
         if (!validate(id)) {
             throw new BadRequestException("Album id isn't valid");
         }
@@ -62,5 +63,11 @@ export class AlbumService {
             throw new NotFoundException('Album not found');
         }
         this.albums.splice(index, 1);
+
+        const tracks = await this.trackService.getAll();
+        const finedTrack =tracks.find(track => track.albumId===id);
+        if (finedTrack) {
+            await this.trackService.update(finedTrack.id,{albumId:null});
+        }
     }
 }
