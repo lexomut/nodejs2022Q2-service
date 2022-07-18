@@ -5,7 +5,8 @@ info:
   version: 1.0.0
 
 servers:
-  - url: /api
+  #  - url: /api
+  - url:/
 
 components:
   schemas:
@@ -114,46 +115,46 @@ components:
       bearerFormat: JWT
 
 security:
-  - bearerAuth: []
+  - bearerAuth: [ ]
 
 paths:
-  /login:
-    post:
-      tags:
-        - Login
-      security: []
-      summary: Login
-      description: Logins a user and returns a JWT-token
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                login:
-                  type: string
-                  description: Username
-                password:
-                  type: string
-                  description: Password
-              required:
-                - user
-                - login
-      responses:
-        200:
-          description: Successful login.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                description: JWT Token
-        403:
-          description: Incorrect login or password
+  #  /login:
+  #    post:
+  #      tags:
+  #        - Login
+  #      security: []
+  #      summary: Login
+  #      description: Logins a user and returns a JWT-token
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: object
+  #              title: example
+  #              properties:
+  #                login:
+  #                  type: string
+  #                  description: Username
+  #                password:
+  #                  type: string
+  #                  description: Password
+  #              required:
+  #                - user
+  #                - login
+  #      responses:
+  #        200:
+  #          description: Successful login.
+  #          content:
+  #            application/json:
+  #              schema:
+  #                type: object
+  #                properties:
+  #                  token:
+  #                    type: string
+  #                description: JWT Token
+  #        403:
+  #          description: Incorrect login or password
   /signup:
     post:
       tags:
@@ -239,7 +240,8 @@ paths:
           description: Bad request. body does not contain required fields
         401:
           $ref: '#/components/responses/UnauthorizedError'
-  /users/{userId}:
+#  /users/{userId}:
+  /user/{userId}:
     parameters:
       - name: userId
         in: path
@@ -334,7 +336,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: User not found
-  /tracks:
+#  /tracks:
+  /track:
     get:
       tags:
         - Track
@@ -388,7 +391,8 @@ paths:
           description: Bad request. body does not contain required fields
         401:
           $ref: '#/components/responses/UnauthorizedError'
-  /tracks/{id}:
+#  /tracks/{id}:
+      /track/{id}:
     parameters:
       - name: id
         in: path
@@ -492,7 +496,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Track was not found.
-  /albums:
+#  /albums:
+  /album:
     get:
       tags:
         - Album
@@ -544,7 +549,8 @@ paths:
           description: Bad request. body does not contain required fields
         401:
           $ref: '#/components/responses/UnauthorizedError'
-  /albums/{id}:
+#  /albums/{id}:
+    /album/{id}:
     parameters:
       - name: id
         in: path
